@@ -1,0 +1,10 @@
+textarea {
+    overflow: hidden;
+    padding: 0;
+    outline: none;
+    width: 90vw; 
+}
+
+table { 
+    width: 90vw; 
+}

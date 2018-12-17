@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+    <script src="textAreaAutoScaling.js"></script>
+</head>
+<body onload="init();">
+    <textarea id="input"></textarea><br>
+    <button onclick="addClass()">Add Class</button>
+    <div id="test">
+        
+    </div>
+    <h2>Timetable Trimming</h2>
+    <h3>Trim Day</h3> 
+    <select id="daySelect">
+        <option value="Mon">Monday</option>
+        <option value="Tue">Tuesday</option>
+        <option value="Wed">Wednesday</option>
+        <option value="Thu">Thursday</option>
+        <option value="Fri">Friday</option>
+        <option value="Sat">Saturday</option>
+        <option value="Sun">Sunday</option>
+    </select><button onclick="trimDayController()">Trim out day</button>
+    <br>
+    <h3>Trim Time Below</h3>
+    <input type=number max=24 min=0 step=1 id="trimBelowHour" /> <input type=number max=60 min=0 step=15 id="trimBelowMinute" /> 
+    <button onclick="trimBelowTimeController()">Trim lower (Remove any below this time)</button>
+
+    <h3>Trim Time Above</h3>
+    <input type=number max=24 min=0 step=1 id="trimAboveHour"/> <input type=number max=60 min=0 step=15 id="trimAboveMinute" /> 
+    <button onclick="trimAboveTimeController()">Trim higher (Remove any above this time)</button>
+
+    <br><br>
+    <button onclick="showClasses()">Show Classes</button>
+</body>
+</html>
