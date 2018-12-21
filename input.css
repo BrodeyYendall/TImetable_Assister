@@ -1,0 +1,153 @@
+h1 { 
+    color: #4a4848; 
+    font-size: 4em; 
+    margin: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+p, label { 
+    font-size: 1.4em; 
+    color: #636363; 
+    margin: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+ol {
+    font-size: 1.2em; 
+    color: #636363; 
+    margin: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+body { 
+    margin-left: 5vw; 
+}
+
+
+textarea, input[type="text"] {
+    border: none;
+    box-shadow: 0 0 3px gray; 
+}
+
+textarea { 
+    overflow: hidden;
+    padding: 0;
+    width: 70vw; 
+    resize: none; 
+}
+
+#classEntryArea { 
+    margin-top: 5vh; 
+}
+
+#classDetails { 
+    margin-bottom: 1vh; 
+}
+
+#classNameInput { 
+    margin-left: 1vw; 
+    font-size: 1em; 
+    padding-left: 0.5vw; 
+    width: 20vw; 
+}
+
+#submitClassButtonWrapper { 
+    text-align: center;
+    display: block;
+    width: 70vw; 
+    margin-top: 3vh; 
+}
+
+#submitClassButton { 
+    padding: 1vh 2vw; 
+    background-color: #54c242; 
+    border: none;
+    color: white; 
+    font-size: 1.6em; 
+    box-shadow: 6px 6px #3f9d2f; 
+}
+
+#submitClassButton:hover { 
+    background-color: #4bb23a; 
+}
+
+#submitClassButton:active {
+    box-shadow: none; 
+    transform: translateX(6px) translateY(6px); 
+}
+
+
+#classList { 
+    margin-top: 10vh; 
+}
+
+.classContainer { 
+    width: 70vw;
+}
+
+.classHideShowHeader {
+    background-color: #f5a9af; 
+    padding: 0.5vh 5%; 
+    border: #d6919d 2px solid; 
+}
+
+.classHideShowHeader div { 
+    color: white;
+    font-size: 1.6em; 
+    font-family: Arial, Helvetica, sans-serif; 
+    display: inline-block;
+    width: 49%;
+    vertical-align: middle; 
+}
+
+#className {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#instructionText {
+    text-align: right; 
+    font-size: 1em; 
+}
+
+.classHideShowContents {
+    background-color:rgba(245, 169, 175, 0.2); 
+    padding: 1vh 5%; 
+    border: #d6919d 2px solid; 
+    border-top: none; 
+    display: block; 
+}
+
+.classTable {
+    color: #636363; 
+    font-size: 1.2em; 
+    width: 100%; 
+}
+
+.classTable td {
+    text-align: center;
+}
+
+.classTable {
+    border-collapse: collapse;
+}
+.classTable td, table th {
+border: 2px solid #a6a6a6;
+}
+
+/* Removing all outer borders */ 
+.classTable tr:first-child th {
+border-top: 0;
+}
+.classTable tr:last-child td {
+border-bottom: 0;
+}
+.classTable tr td:first-child,
+.classTable tr th:first-child {
+border-left: 0;
+}
+.classTable tr td:last-child,
+.classTable tr th:last-child {
+border-right: 0;
+}
