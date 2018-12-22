@@ -13,7 +13,7 @@ function classEntryKeyPress(e) {
     }
 }
 
-function timetableToObject(toChange) { 
+function timetableToSlots(toChange) { 
     let rows = toChange.split("\n"); 
     rows.splice(0, 1);
     for(i = 0; i < rows.length; i++) { 
@@ -41,20 +41,42 @@ function classToTable(classToConvert) {
 } 
 
 function addClass() { 
-    let classObject = timetableToObject(document.getElementById("classInput").value);
+    let slots = timetableToSlots(document.getElementById("classInput").value);
     let className =  document.getElementById("classNameInput").value; 
-    classes.push(classObject); 
     if(className === null || className === "") {
         className = "Class " + classes.length; 
     }
 
-    let table = classToTable(classObject); 
-    let tableContainer = "<div class='classContainer'><div class='classHideShowHeader' onclick='toggleClassContents(this.parentElement)'>" ; 
-    tableContainer += "<div id='className'>" + className +"</div><div id='instructionText'>Click to show more</div>"; 
-    tableContainer += "</div><div class='classHideShowContents'>"; 
+    let colour = document.getElementById("classColourInput").value;
+    let classObject = {name:className, colour:colour, slots: slots}
+
+    classes.push(classObject); 
+
+    let colourSub = colour.substring(1);  // Removes the # at the start 
+    let r = parseInt(colourSub.substring(0,2), 16);
+    let g = parseInt(colourSub.substring(2,4), 16);
+    let b = parseInt(colourSub.substring(4,6), 16);
+
+    let luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // Calculate the "brightness" (luma) of the colour with luma coefficents https://en.wikipedia.org/wiki/Rec._709#Luma_coefficients
+
+    let fontColour; 
+    if(luma < 180) {    
+        fontColour = "white";
+    } else {
+        fontColour = "#636363"; // Colour used for black text, causes the text to appear more warm  
+    }
+
+    let table = classToTable(slots); 
+
+    let classHeaderStyle = "background-color:" + colour +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + ");"
+    let classContentStyle = "background-color: rgba(" +  + (r - 20) + "," + (g - 20) + "," + (b - 20) + "," + (0.2) + ")" +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + ")";
+
+    let tableContainer = "<div class='classContainer'><div class='classHideShowHeader' onclick='toggleClassContents(this.parentElement)' style='" + classHeaderStyle + "'>" ; 
+    tableContainer += "<div id='className' style='color: " + fontColour + "'>" + className +"</div><div id='instructionText' style='color: " + fontColour + "'>Click to show more</div>"; 
+    tableContainer += "</div><div class='classHideShowContents' style='" + classContentStyle + "'>"; 
     tableContainer += table +"</div></div>"; 
     document.getElementById("classList").innerHTML = tableContainer + document.getElementById("classList").innerHTML; 
 
-    document.getElementById("classInput").value = null; 
-    document.getElementById("classNameInput").value = "";
+    /*document.getElementById("classInput").value = null; 
+    document.getElementById("classNameInput").value = ""; */ 
 }
