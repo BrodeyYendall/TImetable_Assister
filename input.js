@@ -2,7 +2,17 @@ var classes = [];
 
 function toggleClassContents(classContainer) { 
     let contents = classContainer.querySelector(".classHideShowContents"); 
-    contents.style.display = (contents.style.display === "block") ? "none":"block";
+
+    let imageContainer = classContainer.querySelector(".classHideShowHeader").querySelector(".instructionText"); 
+    let image = imageContainer.getElementsByTagName("img")[0]; 
+
+    if(contents.style.display === "block" || contents.style.display === "") { 
+        contents.style.display = "none"
+        image.style.transform = "scaleY(1)";
+    } else { 
+        contents.style.display = "block";
+        image.style.transform = "scaleY(-1)";
+    }
 }
 
 function classEntryKeyPress(e) { 
@@ -60,19 +70,22 @@ function addClass() {
     let luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // Calculate the "brightness" (luma) of the colour with luma coefficents https://en.wikipedia.org/wiki/Rec._709#Luma_coefficients
 
     let fontColour; 
+    let image; 
     if(luma < 180) {    
         fontColour = "white";
+        image = "arrowLight.png"
     } else {
         fontColour = "#636363"; // Colour used for black text, causes the text to appear more warm  
+        image = "arrowDark.png"
     }
 
     let table = classToTable(slots); 
 
-    let classHeaderStyle = "background-color:" + colour +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + ");"
+    let classHeaderStyle = "background-color:" + colour +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + "); display:block;"
     let classContentStyle = "background-color: rgba(" +  + (r - 20) + "," + (g - 20) + "," + (b - 20) + "," + (0.2) + ")" +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + ")";
 
     let tableContainer = "<div class='classContainer'><div class='classHideShowHeader' onclick='toggleClassContents(this.parentElement)' style='" + classHeaderStyle + "'>" ; 
-    tableContainer += "<div id='className' style='color: " + fontColour + "'>" + className +"</div><div id='instructionText' style='color: " + fontColour + "'>Click to show more</div>"; 
+    tableContainer += "<div class='className' style='color: " + fontColour + "'>" + className +"</div><div class='instructionText' style='color: " + fontColour + "'>Click to show more <img src='media/" + image + "'/></div>"; 
     tableContainer += "</div><div class='classHideShowContents' style='" + classContentStyle + "'>"; 
     tableContainer += table +"</div></div>"; 
     document.getElementById("classList").innerHTML = tableContainer + document.getElementById("classList").innerHTML; 
