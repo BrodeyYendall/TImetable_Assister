@@ -12,7 +12,7 @@ else {
     };
 }
 function init () {
-    var text = document.getElementById('input');
+    var text = document.getElementById('classInput');
     function resize () {
         text.style.height = 'auto';
         text.style.height = text.scrollHeight+'px';

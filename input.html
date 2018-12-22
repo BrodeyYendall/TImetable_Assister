@@ -9,7 +9,7 @@
     <script src="input.js"></script>
     <script src="textAreaAutoScaling.js"></script>
 </head>
-<body>
+<body onload="init();">
     <h1>Manual Timetable Entry</h1>
     <p>To input your timetable simply: </p>
     <ol>
@@ -20,44 +20,16 @@
         <li>Return to this page, select the textbox below and hit paste (Control+V)</li>
         <li>Optionally set a name for the class so you can identify it easily</li>
     </ol>
-    <form id="classEntryArea"> 
+    <div id="classEntryArea"> 
+        <textarea id="classInput" onkeypress="classEntryKeyPress(event)"></textarea>   
         <div id="classDetails"> 
-            <label>Class name:</label><input type="text" id="classNameInput">
+            <label>Class name:</label><input type="text" id="classNameInput" onkeypress="classEntryKeyPress(event)">
         </div>
-        
-        <textarea id="classInput"> </textarea>   
-        <div id="submitClassButtonWrapper"><button type="submit" id="submitClassButton">Submit</button></div>
-    </form>
+        <div id="submitClassButtonWrapper"><button onclick="addClass();" id="submitClassButton">Submit</button></div>
+    </div>
     
     <div id="classList">
-        <div class="classContainer">
-            <div class="classHideShowHeader" onclick="toggleClassContents(this.parentElement)">
-                <div id="className">A Really long class name that probably won't fit</div>
-                <div id="instructionText">Click to show more</div>
-            </div>
-            <div class="classHideShowContents"> 
-                <table class="classTable">
-                    <tr>
-                        <th>Day</th>
-                        <th>Time</th>
-                        <th>Location</th>
-                        <th>Duration</th>
-                    </tr>
-                    <tr>
-                        <td>Tue</td>
-                        <td>12:30</td>
-                        <td>56.09.12</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>Fri</td>
-                        <td>14:30</td>
-                        <td>80.07.83</td>
-                        <td>1</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        
     </div>
 </body>
 </html>
