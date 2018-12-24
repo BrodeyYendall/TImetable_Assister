@@ -23,8 +23,14 @@
     <div id="classEntryArea"> 
         <textarea id="classInput" onkeypress="classEntryKeyPress(event)"></textarea>   
         <div id="classDetails"> 
-            <label>Class name:</label><input type="text" id="classNameInput" onkeypress="classEntryKeyPress(event)">
-            <label id="classColourInputLabel">Class Colour:</label><input type="color" id="classColourInput">
+            <div id="classNameWrapper"> 
+                <label>Class name:</label><input type="text" id="classNameInput" onkeypress="classEntryKeyPress(event)">
+            </div>
+            
+            <div id="classColourWrapper"> 
+                <label id="classColourInputLabel">Class Colour:</label><input type="color" id="classColourInput">
+            </div>
+            
         </div>
         <div id="submitClassButtonWrapper"><button onclick="addClass();" id="submitClassButton">Submit</button></div>
     </div>

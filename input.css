@@ -36,6 +36,10 @@ textarea {
     resize: none; 
 }
 
+#classInput {
+    min-width: 380px; 
+}
+
 #classEntryArea { 
     margin-top: 5vh; 
 }
@@ -45,8 +49,9 @@ textarea {
     vertical-align: middle;
 }
 
-#classDetails > label, #classDetails > input{
+#classDetails > div{
     vertical-align: middle;
+    display: inline-block; 
 }
 
 #classNameInput { 
@@ -88,11 +93,13 @@ textarea {
 
 .classContainer { 
     width: 70vw;
+    min-width: 380px; 
     margin-top: 2vh; 
 }
 
 .classHideShowHeader {
     padding: 0.5vh 5%; 
+    border: 2px solid; 
 }
 
 .classHideShowHeader div { 
@@ -109,8 +116,9 @@ textarea {
     text-overflow: ellipsis;
 }
 
-#classColourInputLabel {
+#classColourWrapper{
     margin-left: 2vw;
+    vertical-align: middle; 
 }
 
 #classColourInput {
@@ -118,6 +126,11 @@ textarea {
     background: none; 
     margin-left: 1vw; 
     padding: 0;
+    vertical-align: middle;
+}
+
+#classColourInputLabel {
+    vertical-align: middle;
 }
 
 .instructionText {
@@ -170,4 +183,15 @@ border-left: 0;
 .classTable tr td:last-child,
 .classTable tr th:last-child {
 border-right: 0;
+}
+
+
+@media(max-width: 760px) {
+    #classDetails > div {
+        display: block; 
+    }
+    #classColourWrapper {
+        margin-top: 2vh; 
+        margin-left: 0px; 
+    }
 }
