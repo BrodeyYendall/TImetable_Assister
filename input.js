@@ -1,9 +1,10 @@
 var classes = []; 
+var classCount = 0; 
 
 function toggleClassContents(classContainer) { 
     let contents = classContainer.querySelector(".classHideShowContents"); 
 
-    let imageContainer = classContainer.querySelector(".classHideShowHeader").querySelector(".instructionText"); 
+    let imageContainer = classContainer.querySelector(".classHideShowHeader").querySelector(".instructionTextWrapper"); 
     let image = imageContainer.getElementsByTagName("img")[0]; 
 
     if(contents.style.display === "block" || contents.style.display === "") { 
@@ -54,15 +55,21 @@ function addClass() {
     let slots = timetableToSlots(document.getElementById("classInput").value);
     let className =  document.getElementById("classNameInput").value; 
     if(className === null || className === "") {
-        className = "Class " + classes.length; 
+        className = "Class " + classCount; 
     }
 
     let colour = document.getElementById("classColourInput").value;
-    let classObject = {name:className, colour:colour, slots: slots}
+    let classObject = {colour:colour, slots: slots}
 
-    classes.push(classObject); 
+    classes[className] = classObject; 
+    classCount += 1; 
 
-    let colourSub = colour.substring(1);  // Removes the # at the start 
+    document.getElementById("classList").innerHTML = visualiseClass(classObject, className) + document.getElementById("classList").innerHTML; 
+}
+
+function visualiseClass(classObject, name) { 
+
+    let colourSub = classObject["colour"].substring(1);  // Removes the # at the start 
     let r = parseInt(colourSub.substring(0,2), 16);
     let g = parseInt(colourSub.substring(2,4), 16);
     let b = parseInt(colourSub.substring(4,6), 16);
@@ -79,17 +86,46 @@ function addClass() {
         image = "arrowDark.png"
     }
 
-    let table = classToTable(slots); 
+    let table = classToTable(classObject["slots"]); 
 
-    let classHeaderStyle = "background-color:" + colour +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + "); display:block;"
-    let classContentStyle = "background-color: rgba(" +  + (r - 20) + "," + (g - 20) + "," + (b - 20) + "," + (0.2) + ")" +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + ")";
+    let classHeaderStyle = "background-color:" + classObject["colour"] +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + "); display:block;"
+    let classContentStyle = "background-color: rgba(" +  r + "," + g+ "," + b + "," + (0.2) + ")" +  ";border-color: rgb(" + (r - 20) + "," + (g - 20) + "," + (b - 20) + ")";
 
-    let tableContainer = "<div class='classContainer'><div class='classHideShowHeader' onclick='toggleClassContents(this.parentElement)' style='" + classHeaderStyle + "'>" ; 
-    tableContainer += "<div class='className' style='color: " + fontColour + "'>" + className +"</div><div class='instructionText' style='color: " + fontColour + "'>Click to show more <img src='media/" + image + "'/></div>"; 
-    tableContainer += "</div><div class='classHideShowContents' style='" + classContentStyle + "'>"; 
-    tableContainer += table +"</div></div>"; 
-    document.getElementById("classList").innerHTML = tableContainer + document.getElementById("classList").innerHTML; 
-
-    /*document.getElementById("classInput").value = null; 
-    document.getElementById("classNameInput").value = ""; */ 
+    return "\
+    <div class='classContainer'>\
+        <div class='classHideShowHeader' onclick='toggleClassContents(this.parentElement)' style='" + classHeaderStyle + "'>\
+            <div class='className' style='color: " + fontColour + "'>" + name +"</div>\
+            <div class='instructionTextWrapper'>\
+                <span class='instructionText' style='color: " + fontColour + "'>Click to show more </span><img src='media/" + image + "'/>\
+            </div>\
+        </div>\
+        <div class='classHideShowContents' style='" + classContentStyle + "'>\
+            " + table + "\
+        </div>\
+    </div>";
 }
+
+
+function listTest() {
+    var list = [1,2,{test: true, real:"yes"}]; 
+    let object1 = {test: true, real:"yes"}; 
+    let object2 = {test: true, real:"no"}; 
+    let found = list.find(function(element) {
+        return compareObjects(element, object1); 
+    });
+    console.log(found);
+    if(compareObjects(object1, object2)) {
+        console.log("found");
+    } else {
+        console.log("not found"); 
+    }
+}
+
+function compareObjects(object1, object2) {; 
+    if(JSON.stringify(object1) === JSON.stringify(object2) ) {
+        return true;
+    } else {
+        return false; 
+    }
+}
+

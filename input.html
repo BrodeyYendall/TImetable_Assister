@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,34 +10,83 @@
     <script src="input.js"></script>
     <script src="textAreaAutoScaling.js"></script>
 </head>
-<body onload="init();">
+
+<body onload="init();listTest();">
     <h1>Manual Timetable Entry</h1>
     <p>To input your timetable simply: </p>
     <ol>
         <li>Go to myTimetable</li>
         <li>Select the class</li>
-        <li>Highlight all the columns from Activity to Weeks</li> 
+        <li>Highlight all the columns from Activity to Weeks</li>
         <li>Copy (Control+C)</li>
         <li>Return to this page, select the textbox below and hit paste (Control+V)</li>
         <li>Optionally set a name for the class so you can identify it easily</li>
     </ol>
-    <div id="classEntryArea"> 
-        <textarea id="classInput" onkeypress="classEntryKeyPress(event)"></textarea>   
-        <div id="classDetails"> 
-            <div id="classNameWrapper"> 
+    <div id="classEntryArea">
+        <textarea id="classInput" onkeypress="classEntryKeyPress(event)"></textarea>
+        <div id="classDetails">
+            <div id="classNameWrapper">
                 <label>Class name:</label><input type="text" id="classNameInput" onkeypress="classEntryKeyPress(event)">
             </div>
-            
-            <div id="classColourWrapper"> 
+
+            <div id="classColourWrapper">
                 <label id="classColourInputLabel">Class Colour:</label><input type="color" id="classColourInput">
             </div>
-            
+
         </div>
         <div id="submitClassButtonWrapper"><button onclick="addClass();" id="submitClassButton">Submit</button></div>
     </div>
-    
+
     <div id="classList">
-        
+        <div class="classContainer">
+            <div class="classHideShowHeader" onclick="toggleClassContents(this.parentElement)" style="background-color:#000000;border-color: rgb(-20,-20,-20); display:block;">
+                <div class="className" style="color: white">This is class used for testing</div>
+                <div class="instructionTextWrapper"><span class="instructionText" style="color: white">Click to show more </span><img src="media/arrowLight.png"></div>
+            </div>
+            <div class="classHideShowContents" style="background-color: rgba(-20,-20,-20,0.2);border-color: rgb(-20,-20,-20)">
+                <table class="classTable">
+                    <tbody>
+                        <tr>
+                            <th>Day</th>
+                            <th>Time</th>
+                            <th>Location</th>
+                            <th>Duration</th>
+                        </tr>
+                        <tr>
+                            <td>Tue</td>
+                            <td>08:30</td>
+                            <td>014.09.015</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Mon</td>
+                            <td>12:30</td>
+                            <td>008.09.048</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Mon</td>
+                            <td>12:30</td>
+                            <td>014.10.031</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Tue</td>
+                            <td>08:30</td>
+                            <td>014.09.023</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Tue</td>
+                            <td>12:30</td>
+                            <td>008.09.049</td>
+                            <td>2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
+
 </html>

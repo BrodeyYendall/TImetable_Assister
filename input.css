@@ -98,14 +98,13 @@ textarea {
 }
 
 .classHideShowHeader {
-    padding: 0.5vh 5%; 
+    padding: 0.5vh 3%; 
     border: 2px solid; 
 }
 
 .classHideShowHeader div { 
     font-family: Arial, Helvetica, sans-serif; 
     display: inline-block;
-    width: 50%;
     vertical-align: middle; 
 }
 
@@ -114,6 +113,7 @@ textarea {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 69%; 
 }
 
 #classColourWrapper{
@@ -136,10 +136,14 @@ textarea {
 .instructionText {
     text-align: right; 
     font-size: 1em; 
-    vertical-align: middle;
 }
-.instructionText img {
-    width: 5%; 
+
+.instructionTextWrapper {
+    width: 30%; 
+    text-align: right;
+}
+.instructionTextWrapper img {
+    width: 10%; 
     margin-left: 1vw; 
     vertical-align: middle;
     transform: scaleY(-1);
@@ -193,5 +197,33 @@ border-right: 0;
     #classColourWrapper {
         margin-top: 2vh; 
         margin-left: 0px; 
+    }
+}
+
+@media(max-width: 840px) { 
+    .className {
+        width: 58%; 
+    }
+
+    .instructionTextWrapper {
+        width: 40%; 
+    }
+}
+
+@media(max-width: 625px) {
+    .instructionText {
+        display: none; 
+    }
+
+    .className {
+        width: 75%; 
+    }
+
+    .instructionTextWrapper {
+        width: 20%; 
+    }
+
+    .instructionTextWrapper img {
+        width: 30%; 
     }
 }
