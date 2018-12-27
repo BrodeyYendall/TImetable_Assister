@@ -63,28 +63,33 @@ function classToTable(classToConvert) {
 } 
 
 function addClass() { 
-    let slots = timetableToSlots(document.getElementById("classInput").value);
     let className =  document.getElementById("classNameInput").value; 
-    if(className === null || className === "") {
-        className = "Class " + classCount; 
+    if(classes[className] === undefined) {
+        let slots = timetableToSlots(document.getElementById("classInput").value);
+        while(classes[className] !== undefined || className === null || className === "") {
+            className = "Class " + classCount; 
+            classCount += 1; 
+            console.log(className);
+        }
+    
+        let colour = document.getElementById("classColourInput").value;
+        let classObject = {colour:colour, slots: slots}
+    
+        classes[className] = classObject; 
+    
+        let classList = document.getElementById("classList");
+        let visualisedClass = visualiseClass(classObject, className); 
+    
+        classList.insertBefore(visualisedClass, classList.childNodes[0]); 
+    
+        visualisedClass.querySelector(".classHideShowHeader").addEventListener("click", toggleClassContents);
+    } else {
+        alert("Name is already in use");
     }
-
-    let colour = document.getElementById("classColourInput").value;
-    let classObject = {colour:colour, slots: slots}
-
-    classes[className] = classObject; 
-    classCount += 1; 
-
-
-    let classList = document.getElementById("classList");
-    let visualisedClass = visualiseClass(classObject, className); 
-
-    classList.insertBefore(visualisedClass, classList.childNodes[0]); 
-
-    visualisedClass.querySelector(".classHideShowHeader").addEventListener("click", toggleClassContents);
 }
 
 function visualiseClass(classObject, name) { 
+    name = escapeHTML(name); 
 
     let rgb = getRGB(classObject["colour"]); 
     let luma = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]; // Calculate the "brightness" (luma) of the colour with luma coefficents https://en.wikipedia.org/wiki/Rec._709#Luma_coefficients
@@ -122,22 +127,6 @@ function visualiseClass(classObject, name) {
         " + table + "\
     </div>"; 
     return visualisedOjbect; 
-}
-
-
-function listTest() {
-    var list = [1,2,{test: true, real:"yes"}]; 
-    let object1 = {test: true, real:"yes"}; 
-    let object2 = {test: true, real:"no"}; 
-    let found = list.find(function(element) {
-        return compareObjects(element, object1); 
-    });
-    console.log(found);
-    if(compareObjects(object1, object2)) {
-        console.log("found");
-    } else {
-        console.log("not found"); 
-    }
 }
 
 function removeObject(classContainer) {
@@ -178,8 +167,6 @@ function changeClassColour(classHeader, newColour) {
     instructionTextWrapper.getElementsByTagName("img")[0].src = "media/" + image; 
     
     classHeader.parentElement.querySelector(".classHideShowContents").style = "background-color: rgba(" +  rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + (0.2) + ")" +  ";border-color: " + borderColour + ";";
-
-    console.log(classes); 
 }
 
 function getRGB(colour) {
@@ -203,14 +190,25 @@ function compareObjects(object1, object2) {;
 }
 
 function getOriginalName(nameContainer) {
-    console.log("Preparing name");
     originalName = nameContainer.value; 
 }
 
 function changeName(nameContainer) {
-    let newName = nameContainer.value; 
-    let classbject = classes[originalName];
-    delete classes[originalName]; 
-    classes[nameContainer.value] = classbject;
+    if(classes[nameContainer.value] === undefined) { 
+        let classbject = classes[originalName];
+        delete classes[originalName]; 
+        classes[nameContainer.value] = classbject;
+    } else {
+        alert("Couldn't change name. The new name was already in use");
+        nameContainer.value = originalName; 
+    }
+
 }
 
+function escapeHTML(string) { // https://stackoverflow.com/questions/6234773/can-i-escape-html-special-chars-in-javascript
+    return string.replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
