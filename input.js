@@ -1,6 +1,8 @@
 var classes = new Object(); 
 var classCount = 0; 
 var originalName = ""; 
+const defaultColours = ["#ea7869", "#ec9c62", "#66bef9", "#c18eff", "#47c512", "#db3720", "#ce661a", "#097cca", "#821cff", "#80ef51"]; 
+var colourCount = 1; 
 
 
 function toggleClassContents(event) { 
@@ -37,7 +39,6 @@ function classEntryKeyPress(e) {
 
 function timetableToSlots(toChange) { 
     let rows = toChange.split("\n"); 
-    rows.splice(0, 1);
     for(i = 0; i < rows.length; i++) { 
         rows[i] = rows[i].split("\t");  
         if(rows[i][0] == "") {
@@ -83,6 +84,11 @@ function addClass() {
         classList.insertBefore(visualisedClass, classList.childNodes[0]); 
     
         visualisedClass.querySelector(".classHideShowHeader").addEventListener("click", toggleClassContents);
+
+        document.getElementById("classNameInput").value = ""; 
+        document.getElementById("classInput").value = ""; 
+        document.getElementById("classColourInput").value = defaultColours[colourCount % defaultColours.length]; // The modulus operation means that the colours will continuously loop 
+        colourCount++; 
     } else {
         alert("Name is already in use");
     }
