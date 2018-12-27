@@ -26,7 +26,7 @@
         <textarea id="classInput" onkeypress="classEntryKeyPress(event)"></textarea>
         <div id="classDetails">
             <div id="classNameWrapper">
-                <label>Class name:</label><input type="text" id="classNameInput" onkeypress="classEntryKeyPress(event)">
+                <label>Class name:</label><input type='text' id='classNameInput' onkeypress='classEntryKeyPress(event)' maxlength='30'>
             </div>
 
             <div id="classColourWrapper">
@@ -38,11 +38,13 @@
     </div>
 
     <div id="classList">
-        <div class="classContainer">
-            <div class="classHideShowHeader" onclick="toggleClassContents(this.parentElement)" style="background-color:#000000;border-color: rgb(-20,-20,-20); display:block;">
-                <div class="className" style="color: white">This is class used for testing</div>
+        <!--<div class="classContainer">
+            <div class="classHideShowHeader"  style="background-color:#000000;border-color: rgb(-20,-20,-20);">
+                <input class="classNameChange" style="color: white" type="text" maxlength="30" value="This is class used for testing" onselect='getOriginalName(this);' onchange='changeName(this);'>
+                <input type="color" class="classColourChange" onchange='changeClassColour(this.parentElement, this);'> 
                 <div class="instructionTextWrapper"><span class="instructionText" style="color: white">Click to show more </span><img src="media/arrowLight.png"></div>
             </div>
+            <img class='removeButton' src='media/remove.png' onclick='removeObject(this.parentElement);'/>
             <div class="classHideShowContents" style="background-color: rgba(-20,-20,-20,0.2);border-color: rgb(-20,-20,-20)">
                 <table class="classTable">
                     <tbody>
@@ -85,7 +87,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div>-->
     </div>
 </body>
 
