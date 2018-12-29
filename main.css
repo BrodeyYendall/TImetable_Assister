@@ -1,10 +1,39 @@
-textarea {
-    overflow: hidden;
-    padding: 0;
-    outline: none;
-    width: 90vw; 
+/* CSS used all throughout the page */ 
+
+h1 { 
+    color: #4a4848; 
+    font-size: 4em; 
+    margin: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
 }
 
-table { 
-    width: 90vw; 
+p, label { 
+    font-size: 1.4em; 
+    color: #636363; 
+    margin: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+ol {
+    font-size: 1.2em; 
+    color: #636363; 
+    margin: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+body { 
+    margin-left: 5vw; 
+}
+
+
+textarea, input {
+    border: none;
+    box-shadow: 0 0 3px gray; 
+}
+
+textarea { 
+    overflow: hidden;
+    padding: 0;
+    width: 70vw; 
+    resize: none; 
 }
