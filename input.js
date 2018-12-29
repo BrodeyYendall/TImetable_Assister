@@ -1,4 +1,4 @@
-var classes = new Object(); 
+window.classes = new Object(); 
 var classCount = 0; 
 var originalName = ""; 
 const defaultColours = ["#ea7869", "#ec9c62", "#66bef9", "#c18eff", "#47c512", "#db3720", "#ce661a", "#097cca", "#821cff", "#80ef51"]; 
@@ -65,9 +65,9 @@ function classToTable(classToConvert) {
 
 function addClass() { 
     let className =  document.getElementById("classNameInput").value; 
-    if(classes[className] === undefined) {
+    if(window.classes[className] === undefined) {
         let slots = timetableToSlots(document.getElementById("classInput").value);
-        while(classes[className] !== undefined || className === null || className === "") {
+        while(window.classes[className] !== undefined || className === null || className === "") {
             className = "Class " + classCount; 
             classCount += 1; 
             console.log(className);
@@ -76,7 +76,7 @@ function addClass() {
         let colour = document.getElementById("classColourInput").value;
         let classObject = {colour:colour, slots: slots}
     
-        classes[className] = classObject; 
+        window.classes[className] = classObject; 
     
         let classList = document.getElementById("classList");
         let visualisedClass = visualiseClass(classObject, className); 
@@ -85,8 +85,8 @@ function addClass() {
     
         visualisedClass.querySelector(".classHideShowHeader").addEventListener("click", toggleClassContents);
 
-        document.getElementById("classNameInput").value = ""; 
-        document.getElementById("classInput").value = ""; 
+        //document.getElementById("classNameInput").value = ""; 
+        //document.getElementById("classInput").value = ""; 
         document.getElementById("classColourInput").value = defaultColours[colourCount % defaultColours.length]; // The modulus operation means that the colours will continuously loop 
         colourCount++; 
     } else {
@@ -137,13 +137,13 @@ function visualiseClass(classObject, name) {
 
 function removeObject(classContainer) {
     let className = classContainer.querySelector(".classHideShowHeader").querySelector(".classNameChange").value;
-    delete classes[className]; 
+    delete window.classes[className]; 
     document.getElementById("classList").removeChild(classContainer);
 }
 
 function changeClassColour(classHeader, newColour) { 
     let className = classHeader.querySelector(".classNameChange"); 
-    classes[className.value].colour = newColour.value; 
+    window.classes[className.value].colour = newColour.value; 
 
     let rgb = getRGB(newColour.value); 
     let luma = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]; // Calculate the "brightness" (luma) of the colour with luma coefficents https://en.wikipedia.org/wiki/Rec._709#Luma_coefficients
@@ -200,10 +200,10 @@ function getOriginalName(nameContainer) {
 }
 
 function changeName(nameContainer) {
-    if(classes[nameContainer.value] === undefined) { 
-        let classbject = classes[originalName];
-        delete classes[originalName]; 
-        classes[nameContainer.value] = classbject;
+    if(window.classes[nameContainer.value] === undefined) { 
+        let classbject = window.classes[originalName];
+        delete window.classes[originalName]; 
+        window.classes[nameContainer.value] = classbject;
     } else {
         alert("Couldn't change name. The new name was already in use");
         nameContainer.value = originalName; 

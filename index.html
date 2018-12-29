@@ -1,41 +1,75 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="visualisedClass.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="input.css" /> 
+    <script src="input.js"></script>
+    <script src="timetabling.js"></script>
     <script src="textAreaAutoScaling.js"></script>
 </head>
+
 <body onload="init();">
-    <textarea id="input"></textarea><br>
-    <button onclick="addClass()">Add Class</button>
-    <div id="test">
-        
+    <div id="timetableEntry"> 
+        <h1>Manual Timetable Entry</h1>
+        <p>To input your timetable simply: </p>
+        <ol>
+            <li>Go to myTimetable</li>
+            <li>Select the class</li>
+            <li>Highlight all the columns from Activity to Weeks</li>
+            <li>Copy (Control+C)</li>
+            <li>Return to this page, select the textbox below and hit paste (Control+V)</li>
+            <li>Optionally set a name for the class so you can identify it easily</li>
+        </ol>
+        <div id="classEntryArea">
+            <textarea id="classInput" onkeypress="classEntryKeyPress(event)"></textarea>
+            <div id="classDetails">
+                <div id="classNameWrapper">
+                    <label>Class name:</label><input type='text' id='classNameInput' onkeypress='classEntryKeyPress(event)' maxlength='30'>
+                </div>
+    
+                <div id="classColourWrapper">
+                    <label id="classColourInputLabel">Class Colour:</label><input type="color" id="classColourInput" value="#ea7869">
+                </div>
+    
+            </div>
+            <div id="submitClassButtonWrapper"><button onclick="addClass();" id="submitClassButton">Submit</button></div>
+        </div> 
+        <div id="classList">
+    
+        </div>
     </div>
-    <h2>Timetable Trimming</h2>
-    <h3>Trim Day</h3> 
-    <select id="daySelect">
-        <option value="Mon">Monday</option>
-        <option value="Tue">Tuesday</option>
-        <option value="Wed">Wednesday</option>
-        <option value="Thu">Thursday</option>
-        <option value="Fri">Friday</option>
-        <option value="Sat">Saturday</option>
-        <option value="Sun">Sunday</option>
-    </select><button onclick="trimDayController()">Trim out day</button>
-    <br>
-    <h3>Trim Time Below</h3>
-    <input type=number max=24 min=0 step=1 id="trimBelowHour" /> <input type=number max=60 min=0 step=15 id="trimBelowMinute" /> 
-    <button onclick="trimBelowTimeController()">Trim lower (Remove any below this time)</button>
 
-    <h3>Trim Time Above</h3>
-    <input type=number max=24 min=0 step=1 id="trimAboveHour"/> <input type=number max=60 min=0 step=15 id="trimAboveMinute" /> 
-    <button onclick="trimAboveTimeController()">Trim higher (Remove any above this time)</button>
+    <div id="perferenceSelection">
+        <h1>Perference Selection</h1>
+        <h3>Trim Day</h3> 
+        <select id="daySelect">
+            <option value="Mon">Monday</option>
+            <option value="Tue">Tuesday</option>
+            <option value="Wed">Wednesday</option>
+            <option value="Thu">Thursday</option>
+            <option value="Fri">Friday</option>
+            <option value="Sat">Saturday</option>
+            <option value="Sun">Sunday</option>
+        </select><button onclick="trimDayController()">Trim out day</button>
+        <br>
+        <h3>Trim Time Below</h3>
+        <input type=number max=24 min=0 step=1 id="trimBelowHour" /> <input type=number max=60 min=0 step=15 id="trimBelowMinute" /> 
+        <button onclick="trimBelowTimeController()">Trim lower (Remove any below this time)</button>
 
-    <br><br>
-    <button onclick="showClasses()">Show Classes</button>
+        <h3>Trim Time Above</h3>
+        <input type=number max=24 min=0 step=1 id="trimAboveHour"/> <input type=number max=60 min=0 step=15 id="trimAboveMinute" /> 
+        <button onclick="trimAboveTimeController()">Trim higher (Remove any above this time)</button>
+
+        <br><br>
+        <button onclick="console.log(window.classes);">Show Classes</button>
+    </div>
+    
 </body>
+
 </html>
