@@ -17,6 +17,7 @@
 <body onload="init();">
     <div id="timetableEntry"> 
         <h1>Manual Timetable Entry</h1>
+        <button onclick="loadTestData();">Load test data</button>
         <p>To input your timetable simply: </p>
         <ol>
             <li>Go to myTimetable</li>
@@ -49,13 +50,13 @@
         <h1>Perference Selection</h1>
         <h3>Trim Day</h3> 
         <select id="daySelect">
-            <option value="Mon">Monday</option>
-            <option value="Tue">Tuesday</option>
-            <option value="Wed">Wednesday</option>
-            <option value="Thu">Thursday</option>
-            <option value="Fri">Friday</option>
-            <option value="Sat">Saturday</option>
-            <option value="Sun">Sunday</option>
+            <option value="0">Monday</option>
+            <option value="1">Tuesday</option>
+            <option value="2">Wednesday</option>
+            <option value="3">Thursday</option>
+            <option value="4">Friday</option>
+            <option value="5">Saturday</option>
+            <option value="6">Sunday</option>
         </select><button onclick="trimDayController()">Trim out day</button>
         <br>
         <h3>Trim Time Below</h3>
@@ -66,8 +67,34 @@
         <input type=number max=24 min=0 step=1 id="trimAboveHour"/> <input type=number max=60 min=0 step=15 id="trimAboveMinute" /> 
         <button onclick="trimAboveTimeController()">Trim higher (Remove any above this time)</button>
 
+        <h3>Max number of days going to uni</h3>
+        <input type=number max=7 min=1 step=1 id="maxDays" value="7"/> 
+
+        <h3>Min number of days going to uni</h3>
+        <input type=number max=7 min=1 step=1 id="minDays" value="0"/> 
+
+        <h3>Max hours before break</h3>
+        <input type=number id="maxHoursBeforeBreak" value="1440"/> 
+
+        <h3>Min hours before break</h3>
+        <input type=number id="minHoursBeforeBreak" value="0"/> 
+
+        <h3>Min break length</h3>
+        <input type=number id="minBreakLength" value ="0"/> 
+
+        <h3>Max break length</h3>
+        <input type=number id="maxBreakLength" value ="1440"/> 
+
+        <h3>Max hours</h3>
+        <input type=number id="maxHours" value="1440"/>
+
+        <h3>Min hours</h3>
+        <input type=number id="minHours" value="0"/>
+
+
         <br><br>
         <button onclick="console.log(window.classes);">Show Classes</button>
+        <button onclick="findPossibleTimetables();">Find timetables</button>
     </div>
     
 </body>

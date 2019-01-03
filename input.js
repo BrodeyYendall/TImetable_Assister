@@ -44,12 +44,32 @@ function timetableToSlots(toChange) {
         if(rows[i][0] == "") {
             rows[i].splice(0,1); 
         }
-        rows[i] = {day:rows[i][1].trim(), time:rows[i][2].trim(), location:rows[i][5].trim(), duration:rows[i][6].trim().substring(0,1)}; 
+        rows[i] = {day:convertDay(rows[i][1].trim()), time:rows[i][2].trim(), location:rows[i][5].trim(), duration:rows[i][6].trim().substring(0,1)}; 
     }
-    if(rows[0].day === "Day") { 
+    if(rows[0].day === undefined) { 
         rows.splice(0,1); 
     }
     return rows; 
+}
+
+function convertDay(day) {
+    switch(day) {
+        case "Mon": 
+            return 0; 
+        case "Tue": 
+            return 1; 
+        case "Wed": 
+            return 2; 
+        case "Thu": 
+            return 3; 
+        case "Fri": 
+            return 4; 
+        case "Sat": 
+            return 5; 
+        case "Sun": 
+            return 6; 
+    }
+     
 }
 
 function classToTable(classToConvert) { 
@@ -70,7 +90,6 @@ function addClass() {
         while(window.classes[className] !== undefined || className === null || className === "") {
             className = "Class " + classCount; 
             classCount += 1; 
-            console.log(className);
         }
     
         let colour = document.getElementById("classColourInput").value;
@@ -217,4 +236,245 @@ function escapeHTML(string) { // https://stackoverflow.com/questions/6234773/can
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+
+
+
+
+var testData = {
+    "Compting Theory Lec": {
+      "colour": "#66bef9",
+      "slots": [
+        {
+          "day": 3,
+          "time": "14:30",
+          "location": "080.01.002",
+          "duration": "2"
+        }
+      ]
+    },
+    "Compting Theory Tut": {
+      "colour": "#c18eff",
+      "slots": [
+        {
+          "day": 1,
+          "time": "14:30",
+          "location": "056.05.094",
+          "duration": "2"
+        },
+        {
+          "day": 2,
+          "time": "12:30",
+          "location": "056.05.097",
+          "duration": "2"
+        },
+        {
+          "day": 3,
+          "time": "12:30",
+          "location": "010.08.024",
+          "duration": "2"
+        },
+        {
+          "day": 1,
+          "time": "10:30",
+          "location": "056.05.094",
+          "duration": "2"
+        },
+        {
+          "day": 0,
+          "time": "08:30",
+          "location": "014.06.013",
+          "duration": "2"
+        }
+      ]
+    },
+    "Advanced Prog Lec": {
+      "colour": "#db3720",
+      "slots": [
+        {
+          "day": 3,
+          "time": "10:30",
+          "location": "016.01.001",
+          "duration": "2"
+        }
+      ]
+    },
+    "Advanced Prog Tut": {
+      "colour": "#ec9c62",
+      "slots": [
+        {
+          "day": 2,
+          "time": "14:30",
+          "location": "014.10.030",
+          "duration": "2"
+        },
+        {
+          "day": 1,
+          "time": "08:30",
+          "location": "014.09.015",
+          "duration": "2"
+        },
+        {
+          "day": 0,
+          "time": "12:30",
+          "location": "008.09.048",
+          "duration": "2"
+        },
+        {
+          "day": 0,
+          "time": "12:30",
+          "location": "014.10.031",
+          "duration": "2"
+        },
+        {
+          "day": 1,
+          "time": "08:30",
+          "location": "014.09.023",
+          "duration": "2"
+        },
+        {
+          "day": 1,
+          "time": "12:30",
+          "location": "008.09.049",
+          "duration": "2"
+        }
+      ]
+    },
+    "OS Lecture": {
+      "colour": "#47c512",
+      "slots": [
+        {
+          "day": 4,
+          "time": "08:30",
+          "location": "080.01.002",
+          "duration": "2"
+        }
+      ]
+    },
+    "OS Prac": {
+      "colour": "#db3720",
+      "slots": [
+        {
+          "day": 0,
+          "time": "10:30",
+          "location": "010.08.020",
+          "duration": "1"
+        },
+        {
+          "day": 1,
+          "time": "14:30",
+          "location": "014.10.031",
+          "duration": "1"
+        },
+        {
+          "day": 2,
+          "time": "10:30",
+          "location": "014.10.030",
+          "duration": "1"
+        },
+        {
+          "day": 4,
+          "time": "10:30",
+          "location": "014.10.031",
+          "duration": "1"
+        },
+        {
+          "day": 4,
+          "time": "11:30",
+          "location": "014.10.031",
+          "duration": "1"
+        }
+      ]
+    },
+    "OS Tut": {
+      "colour": "#ce661a",
+      "slots": [
+        {
+          "day": 3,
+          "time": "12:30",
+          "location": "014.06.016",
+          "duration": "1"
+        },
+        {
+          "day": 4,
+          "time": "14:30",
+          "location": "014.06.013",
+          "duration": "1"
+        },
+        {
+          "day": 3,
+          "time": "13:30",
+          "location": "056.07.099",
+          "duration": "1"
+        },
+        {
+          "day": 3,
+          "time": "16:30",
+          "location": "056.05.093",
+          "duration": "1"
+        },
+        {
+          "day": 0,
+          "time": "11:30",
+          "location": "056.05.093",
+          "duration": "1"
+        },
+        {
+          "day": 3,
+          "time": "13:30",
+          "location": "014.06.013",
+          "duration": "1"
+        }
+      ]
+    },
+    "Professional Com Lec": {
+      "colour": "#097cca",
+      "slots": [
+        {
+          "day": 1,
+          "time": "18:30",
+          "location": "080.02.007",
+          "duration": "2"
+        }
+      ]
+    },
+    "Professional Com Tut": {
+      "colour": "#821cff",
+      "slots": [
+        {
+          "day": 1,
+          "time": "08:30",
+          "location": "014.09.023",
+          "duration": "2"
+        },
+        {
+          "day": 4,
+          "time": "14:30",
+          "location": "014.09.015",
+          "duration": "2"
+        },
+        {
+          "day": 0,
+          "time": "08:30",
+          "location": "014.09.015",
+          "duration": "2"
+        },
+        {
+          "day": 2,
+          "time": "10:30",
+          "location": "014.09.023",
+          "duration": "2"
+        }
+      ]
+    }
+  }
+function loadTestData() { 
+    window.classes = testData;
+    for(let key in testData) {
+        let visualisedClass = visualiseClass(testData[key], key);
+
+        let classList = document.getElementById("classList");
+        classList.insertBefore(visualisedClass, classList.childNodes[0]);
+    }
 }
