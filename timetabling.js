@@ -1,71 +1,14 @@
 // CONTROLLERS 
 
-function trimDayController() { 
-    var day = document.getElementById("daySelect").value; 
-    window.classes = trim(trimDay, window.classes, day)
-
-    console.log("Classes trimmed of " + day + ", listing new class list:"); 
-    console.log(window.classes); 
-}
-
-function trimBelowTimeController() { 
-    var hour = parseInt(document.getElementById("trimBelowHour").value); 
-    var minute = parseInt(document.getElementById("trimBelowMinute").value);
-    window.classes = trim(trimBelowTime, window.classes, hour, minute)
-
-    console.log("All classes with a time eariler then " + hour + ":" + minute + " trimmed, listing new class list:")
-    console.log(window.classes); 
-}
-
-function trimAboveTimeController() { 
-    var hour = parseInt(document.getElementById("trimAboveHour").value); 
-    var minute = parseInt(document.getElementById("trimAboveMinute").value);
-    window.classes = trim(trimAboveTime, window.classes, hour, minute)
-    
-    console.log("All classes with a time above " + hour + ":" + minute + " trimmed, listing new class list:")
-    console.log(window.classes); 
-}
-
-
-
-
-// BELOW THIS COMMENT IS THE MODEL, ABOVE IS THE CONTROLLER
-
-// TRIMMING. A trimming method is a method that can remove time slots based on simplistic conditions. I.E a method that doesn't require the construction of a timetable
-function trim(condition, classes, argument1, argument2) {
-    for(let key in classes) {
-        if(classes.hasOwnProperty(key)) {
-            let slots = classes[key].slots;  
-            for(let i = 0; i < slots.length; i++) {
-                if(condition(slots[i],argument1, argument2)) {
-                    slots.splice(i, 1);
-                    i--; 
-                }
-            }
-        }
-    }
-    return classes; 
-}
-
-
-function trimDay(slot, day) { 
-    return day === slot["day"]; 
-}
-
-
-function trimBelowTime(slot, hour, minute) { 
-    var classTime = slot.time.split(":"); 
-    return ((parseInt(classTime[0]) < hour) || ((parseInt(classTime[0]) === hour) && parseInt(classTime[1]) < minute )); 
-}
-
-function trimAboveTime(slot, hour, minute) { 
-    var classTime = slot.time.split(":"); 
-    return ((parseInt(classTime[0])> hour) || ((parseInt(classTime[0]) === hour) && parseInt(classTime[1])> minute )); 
-} 
-
-
 
 function findPossibleTimetables() {
+    let workingTimetable = new TimetableFinder();
+    console.log("Starting: ", workingTimetable.getTimetables()); 
+    for(let i = 0; i < window.perferences.length; i++) {
+        applyPerferenceFunction(window.perferences[i].name, window.perferences[i].value, workingTimetable);
+        console.log(window.perferences[i].name, workingTimetable.getTimetables());
+    }
+    /*
     let maxDays = parseInt(document.getElementById("maxDays").value);
     let maxBeforeBreak = parseInt(document.getElementById("maxHoursBeforeBreak").value);
     let minBreak = parseInt(document.getElementById("minBreakLength").value);
@@ -85,22 +28,76 @@ function findPossibleTimetables() {
         return true; 
     });
     console.log(timetableFinder.getTimetables()); 
+    */  
 
 }
 
+function applyPerferenceFunction(perferenceName, value, timetableFinder) { 
+    switch(perferenceName) {
+        case "setMaxDays":
+            timetableFinder.setMaxDays(value);
+            return timetableFinder;
+
+        case "setMinDays":
+            timetableFinder.setMinDays(value); 
+            return timetableFinder;
+
+        case "removeSpecificDays":
+            timetableFinder.removeSpecificDays(value); 
+            return timetableFinder;
+
+        case "earliestTimeStart":
+            timetableFinder.setEarliestTimeStart(value); 
+            return timetableFinder;
+
+        case "latestTimeEnd":
+            timetableFinder.setLatestTimeEnd(value); 
+            return timetableFinder;
+
+        case "excludeTimeRange":
+            timetableFinder.setExcludeTimeRange(value);
+            return timetableFinder;
+
+        case "onlyTimeRange":
+            timetableFinder.setOnlyTimeRange(value);
+            return timetableFinder;
+
+        case "minBeforeBreak":
+            timetableFinder.setMinBeforeBreak(value);
+            return timetableFinder;
+
+        case "maxBeforeBreak":
+            timetableFinder.setMaxBeforeBreak(value);
+            return timetableFinder;
+        case "minBreak":
+            timetableFinder.setMinBreak(value);
+            return timetableFinder;
+        case "maxBreak":
+            timetableFinder.setMaxBreak(value);
+            return timetableFinder;
+        case "minTotalTime":
+            timetableFinder.setMinTotalTime(value);
+            return timetableFinder;
+
+        case "maxTotalTime":
+            timetableFinder.setMaxTotalTime(value);
+            return timetableFinder;
+
+    }
+}
+
+
+
+
+
+// BELOW THIS COMMENT IS THE MODEL, ABOVE IS THE CONTROLLER
 
 class TimetableFinder {
-    constructor(maxDays, maxBeforeBreak, minBreak, maxHours, timetableValidation) { 
+    constructor() { 
         this.timetables = []; 
-        this.classes = window.classes; 
+        this.classes = window.classes;
 
-        this.maxDays = maxDays;
-        this.maxBeforeBreak = maxBeforeBreak;
-        this.minBreak = minBreak;
-        this.maxHours = maxHours;
-        this.timetableValidation = timetableValidation;
-
-        this.investigateClass(0, this.createEmptyTimetable());
+        this.investigateClass(0, new Timetable());
     }
 
     investigateClass(target, workingTimetable) {
@@ -110,13 +107,11 @@ class TimetableFinder {
             //console.log(i + " of " + target + " with " + JSON.stringify(workingTimetable));
             var slot = targetClass["slots"][i];
             //console.log(i + " of " + target + " adding " + JSON.stringify(slot));
-            var newTimetable = this.createEmptyTimetable(); 
+            var newTimetable = new Timetable(); 
             newTimetable.setContents([JSON.parse(JSON.stringify(workingTimetable)).days, JSON.parse(JSON.stringify(workingTimetable)).groups]);
             if(newTimetable.addTimeSlot(Object.keys(this.classes)[target], slot.day, slot.time, slot.duration )) {
                 if(target === Object.keys(this.classes).length - 1) {
-                    if(this.timetableValidation(newTimetable)) {
-                        this.timetables.push(newTimetable);
-                    }      
+                    this.timetables.push(newTimetable);    
                 } else {
                     this.investigateClass(target + 1,newTimetable); 
                 }       
@@ -125,24 +120,195 @@ class TimetableFinder {
  
     }
 
-    getTimetables() {
-        return JSON.parse(JSON.stringify(this.timetables));
+    setMaxDays(maxDays) { 
+        this.timetables = this.timetables.filter(function(value) {
+            //console.log("Max days", Object.keys(value.days).length+" <= "+parseInt(maxDays), Object.keys(value.days).length <= parseInt(maxDays)); 
+            return Object.keys(value.days).length <= parseInt(maxDays); 
+        }); 
     }
 
-    createEmptyTimetable() {
-        return new Timetable(this.maxDays, this.maxBeforeBreak, this.minBreak, this.maxHours); 
+    setMinDays(minDays) { 
+        this.timetables = this.timetables.filter(function(value) {
+            //console.log("Max days", Object.keys(value.days).length+" >= "+parseInt(minDays), Object.keys(value.days).length >= parseInt(minDays)); 
+            return Object.keys(value.days).length >= parseInt(minDays); 
+        }); 
+    }
+
+    removeSpecificDays(days) {
+        this.timetables = this.timetables.filter(function(value) {
+            for(let i = 0; i < days.length; i++) {
+                //console.log("Specific days", value.days, days[i]); 
+                if(value.days[days[i]] !== undefined) {
+                    return false;
+                }
+            }
+            return true; 
+        }); 
+    }
+
+    setEarliestTimeStart(earliestTime) { 
+        this.timetables = this.timetables.filter(function(value) {
+            for(let day in value.days) {
+                for(let i = 0; i < value.days[day].length; i++ ) { 
+                    //console.log("Earliest start", value.days[day][i][0], earliestTime)
+                    if(value.days[day][i][0] < earliestTime) {
+                        return false; 
+                    }
+                }
+            }
+            return true; 
+        }); 
+    }
+
+    setLatestTimeEnd(latestTime) {
+        this.timetables = this.timetables.filter(function(value) {
+            for(let day in value.days) {
+                for(let i = 0; i < value.days[day].length; i++ ) { 
+                    //console.log("Include range", value.days[day][i][0], latestTime)
+                    if(value.days[day][i][0] > latestTime) {
+                        return false; 
+                    }
+                }
+            }
+            return true;
+        }); 
+    }
+
+    setExcludeTimeRange(range) {
+        this.timetables = this.timetables.filter(function(value) {
+            for(let day in value.days) {
+                for(let i = 0; i < value.days[day].length; i++ ) { 
+                    //console.log("Exclude range 1", value.days[day][i][0]+" >= "+range[0]+" && "+value.days[day][i][0]+" <= "+range[1], value.days[day][i][0] >= range[0], value.days[day][i][0] <= range[1])
+                    if(value.days[day][i][0] >= range[0] && value.days[day][i][0] <= range[1]) {
+                        //console.log("Exclude range 2", range[2]+" == "+true+" || "+value.days[day][i][1]+" <= "+range[1], range[2] == true, value.days[day][i][1] <= range[1])
+                        if(range[2] == true || value.days[day][i][1] <= range[1] ) {
+                            return false; 
+                        }
+                    }
+                }
+            }
+            return true;
+        }); 
+    }
+
+    setOnlyTimeRange(range) {
+        this.timetables = this.timetables.filter(function(value) {
+            for(let day in value.days) {
+                for(let i = 0; i < value.days[day].length; i++ ) { 
+                    //console.log("Include range 1:", value.days[day][i][1]+" < "+range[0]+" || "+value.days[day][i][0]+" > "+range[1],value.days[day][i][1] < range[0],value.days[day][i][0] > range[1]  );
+                    if(value.days[day][i][1] < range[0] || value.days[day][i][0] >= range[1]) {
+                        //console.log("Include range 2:", range[2]+" == "+false+" && "+ value.days[day][i][1]+" > "+range[1], range[2] == false, value.days[day][i][1] > range[1]);
+                        if(range[2] == false &&  value.days[day][i][1] > range[1] ) {
+                            return false; 
+                        }
+                    }
+                }
+            }
+            return true;
+        });  
+    }
+
+    setMinBeforeBreak(minBeforeBreak) {
+        this.timetables = this.timetables.filter(function(value) {
+            value.sortGroups();
+            for(let key in value.groups) {
+                for(let i = 0; i < value.groups[key].length - 1; i++) {
+                    //console.log("Min before", value.groups[key][i][1]+" - "+value.groups[key][i][0]+" < "+minBeforeBreak, value.groups[key][i][1] - value.groups[key][i][0]+" < "+minBeforeBreak, value.groups[key][i][1] - value.groups[key][i][0] < minBeforeBreak); 
+                    if(value.groups[key][i][1] - value.groups[key][i][0] < minBeforeBreak) {
+                        return false; 
+                    }
+                }
+            }
+            return true; 
+        });  
+    }
+
+    setMaxBeforeBreak(maxBeforeBreak) {
+        this.timetables = this.timetables.filter(function(value) {
+            value.sortGroups();
+            for(let key in value.groups) {
+                for(let i = 0; i < value.groups[key].length - 1; i++) {
+                    //console.log("Max before", value.groups[key][i][1]+" - "+value.groups[key][i][0]+" > "+maxBeforeBreak, value.groups[key][i][1] - value.groups[key][i][0]+" > "+maxBeforeBreak, value.groups[key][i][1] - value.groups[key][i][0] > maxBeforeBreak); 
+                    if(value.groups[key][i][1] - value.groups[key][i][0] > maxBeforeBreak) {
+                        return false; 
+                    }
+                }
+            }
+            return true; 
+        }); 
+    }
+
+    setMinBreak(minBreak) {
+        this.timetables = this.timetables.filter(function(value) {
+            value.sortGroups();
+           for(let key in value.groups) {
+               for(let i = 0; i < value.groups[key].length - 1; i++) { 
+                   //console.log("Min break",value.groups[key][i + 1][0]+" - "+value.groups[key][i][1]+" < "+minBreak, value.groups[key][i + 1][0] - value.groups[key][i][1]+" < "+minBreak, value.groups[key][i + 1][0] - value.groups[key][i][1] < minBreak);
+                   if(value.groups[key][i + 1][0] - value.groups[key][i][1] < minBreak) {
+                       return false; 
+                   }
+               }
+           }
+           return true;  
+       }); 
+    }
+
+    setMaxBreak(maxBreak) {
+        this.timetables = this.timetables.filter(function(value) {
+            value.sortGroups();
+           for(let key in value.groups) {
+               for(let i = 0; i < value.groups[key].length - 1; i++) { 
+                //console.log("Max break", value.groups[key][i + 1][0]+" - "+value.groups[key][i][1]+" > "+maxBreak, value.groups[key][i + 1][0] - value.groups[key][i][1]+" > "+maxBreak, value.groups[key][i + 1][0] - value.groups[key][i][1] > maxBreak);
+                   if(value.groups[key][i + 1][0] - value.groups[key][i][1] > maxBreak) {
+                       return false; 
+                   }
+               }
+           }
+           return true;  
+       }); 
+    }
+
+    setMinTotalTime(minTotalTime) { 
+        this.timetables = this.timetables.filter(function(value) {
+            for(let key in value.days) {
+                let total = 0; 
+                for(let i = 0; i < value.days[key].length; i++) {
+                    total += value.days[key][i][1] - value.days[key][i][0]; 
+                }
+                //console.log("Min total time", total+" < "+minTotalTime, total < minTotalTime); 
+                if(total < minTotalTime) {
+                    return false; 
+                }
+            }
+            return true; 
+        });  
+    }
+
+    setMaxTotalTime(maxTotalTime) { 
+        this.timetables = this.timetables.filter(function(value) {
+            for(let key in value.days) {
+                let total = 0; 
+                for(let i = 0; i < value.days[key].length; i++) {
+                    total += value.days[key][i][1] - value.days[key][i][0]; 
+                }
+                //console.log("Max total time",total+" > "+maxTotalTime, total > maxTotalTime);
+                if(total > maxTotalTime) {
+                    return false; 
+                }
+            }
+            return true; 
+        }); 
+    }
+
+    getTimetables() {
+        return JSON.parse(JSON.stringify(this.timetables));
     }
 }
 
 class Timetable {
-    constructor(maxDays, maxBeforeBreak, minBreak, maxHours) {
+    constructor() {
         this.days = new Object();
         this.groups = new Object(); 
-
-        this.maxDays = maxDays;
-        this.maxBeforeBreak = maxBeforeBreak;
-        this.minBreak = minBreak;
-        this.maxHours = maxHours;
     }
 
     addTimeSlot(name, day, start, duration) {
@@ -159,32 +325,14 @@ class Timetable {
                 }
             }
         } else {
-            if(Object.keys(this.days).length >= this.maxDays) {
-                return false; // Adding this time slot will result in going over the max days 
-            }
             this.days[day] = []
         }
 
-        this.makeNewGroups(startTotal, timeTotal,day);
-        if(!this.fitsMaxBeforeBreak() || this.isAboveMaxHours()) {
-            return false; 
-        }
-
-        if(!this.evaluateBreaks(function(breakValues, minBreak) {
-            return (breakValues[1] - breakValues[0] > minBreak);
-        }, this.minBreak)) {
-            return false;
-        }
-
+        this.makeNewGroups(startTotal, timeTotal, day);
         this.days[day].push([startTotal, timeTotal, name]); 
         return true; 
         
     }
-
-    fitsMinDays(minDays) {
-        return (Object.keys(this.days).length >= minDays);
-    }
-
 
     makeNewGroups(startTotal, timeTotal, day) {
         // A class followed immediately by another class is called a group. The following finds any groups in the slots 
@@ -216,89 +364,12 @@ class Timetable {
         }
         if(newGroup === -1) { // DIdn't join any groups
             this.groups[day].push([startTotal, timeTotal]);
+        } else {
+            this.sortGroups();
         }
         
     }
 
-
-    fitsMaxBeforeBreak() {
-        for(let key in this.groups) {
-            for(let j = 0; j < this.groups[key].length; j++) {
-                //console.log(this.groups[key][j][1] - this.groups[key][j][0] +" > "+this.maxBeforeBreak)
-                
-                if(this.groups[key][j][1] - this.groups[key][j][0] > this.maxBeforeBreak) {
-                    return false; 
-                }
-            }
-        }
-        
-        return true; 
-    }
-
-    fitsMinBeforeBreak(minBeforeBreak) {
-        for(let key in this.groups) {
-            for(let j = 0; j < this.groups[key].length; j++) {
-                //console.log(this.groups[key][j][1] - this.groups[key][j][0] +" > "+this.maxBeforeBreak)
-                if(this.groups[key][j][1] - this.groups[key][j][0] < minBeforeBreak) {
-                    return false; 
-                }
-            }
-        }
-        
-        return true; 
-    }
-
-    isBelowMinHours(minHours) {
-        for(let day in this.days) {
-            if(this.calculateDayTotal(day) >= minHours) {
-                return false;  
-            }
-        }
-        return true; 
-    }
-
-    isAboveMaxHours() { 
-        for(let day in this.days) {
-            if(this.calculateDayTotal(day) > this.maxHours) {
-                return true; 
-            }
-        }
-        return false;
-    }
-
-    calculateDayTotal(day) {
-        let dayTotal = 0; 
-        for(let i = 0; i < this.days[day].length; i++) {
-            dayTotal += this.days[day][1] - this.days[day][0];
-        }
-        return dayTotal;
-    }
-
-
-    evaluateBreaks(evulation, argument) { 
-        this.sortGroups(); 
-        for(let day in this.groups) {
-            if(this.groups[day].length > 1) {
-                for(let i = 0; i < this.groups[day].length - 1; i++) {
-                    if(!evulation([this.groups[day][i][1], this.groups[day][i+1][0]], argument)) {
-                        return false; 
-                    } 
-                }
-            }
-        }
-        return true; 
-    }
-
-    fitsMaxBreakLength(maxBreakLength) {
-        let result = this.evaluateBreaks(function(breakValues, maxBreakLength) {
-            return (breakValues[1] - breakValues[0] < maxBreakLength);
-        }, maxBreakLength); 
-        if(!result) {
-            return false;
-        } else { 
-            return true; 
-        }
-    }
 
     sortGroups() { 
         for(let day in this.groups) {
@@ -320,18 +391,4 @@ class Timetable {
     print() {
         console.log(JSON.parse(JSON.stringify(this.days)));
     }
-
-        /*
-    removeTimeSlot(name, day, start, duration) { 
-        let startSplit = start.split(":");
-        let startTotal = (parseInt(startSplit[0]) * 60) + parseInt(startSplit[1]) ; 
-        let timeTotal = startTotal + (duration * 60); 
-        this.days[day] = this.days[day].filter(function(value) {
-            if(value[0] === startTotal && value[1] === timeTotal && value[2] === name) {
-                return false; 
-            } else {
-                return true; 
-            }
-        }); 
-    }*/ 
 }
