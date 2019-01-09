@@ -9,8 +9,10 @@
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="visualisedClass.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="input.css" /> 
+    <link rel="stylesheet" type="text/css" media="screen" href="preferences.css" /> 
     <script src="input.js"></script>
     <script src="timetabling.js"></script>
+    <script src="perferences.js"></script>
     <script src="textAreaAutoScaling.js"></script>
 </head>
 
@@ -45,54 +47,165 @@
     
         </div>
     </div>
+    <h1>Perference Selection</h1>
+    <div id="perferenceList">
+        <div class="perferenceContainer restrictDays"> 
+            <h2>Set maximum number of days</h2>
+            <p>Select the maximum number of days you wish to attend</p>
+            <ul class="numberSelect" value=6>
+                <li onclick="manageButtonSeries(this);">0</li>
+                <li onclick="manageButtonSeries(this);">1</li>
+                <li onclick="manageButtonSeries(this);">2</li>
+                <li onclick="manageButtonSeries(this);">3</li>
+                <li onclick="manageButtonSeries(this);">4</li>
+                <li onclick="manageButtonSeries(this);">5</li>
+                <li onclick="manageButtonSeries(this);">6</li>
+                <li onclick="manageButtonSeries(this);" class="clicked">7</li>
+            </ul>
+        </div>
 
-    <div id="perferenceSelection">
-        <h1>Perference Selection</h1>
-        <h3>Trim Day</h3> 
-        <select id="daySelect">
-            <option value="0">Monday</option>
-            <option value="1">Tuesday</option>
-            <option value="2">Wednesday</option>
-            <option value="3">Thursday</option>
-            <option value="4">Friday</option>
-            <option value="5">Saturday</option>
-            <option value="6">Sunday</option>
-        </select><button onclick="trimDayController()">Trim out day</button>
-        <br>
-        <h3>Trim Time Below</h3>
-        <input type=number max=24 min=0 step=1 id="trimBelowHour" /> <input type=number max=60 min=0 step=15 id="trimBelowMinute" /> 
-        <button onclick="trimBelowTimeController()">Trim lower (Remove any below this time)</button>
+        <div class="perferenceContainer restrictDays"> 
+            <h2>Set minimum number of days</h2>
+            <p>Select the minimum number of days you wish to attend</p>
+            <ul class="numberSelect">
+                <li onclick="manageButtonSeries(this);" class="clicked">0</li>
+                <li onclick="manageButtonSeries(this);">1</li>
+                <li onclick="manageButtonSeries(this);">2</li>
+                <li onclick="manageButtonSeries(this);">3</li>
+                <li onclick="manageButtonSeries(this);">4</li>
+                <li onclick="manageButtonSeries(this);">5</li>
+                <li onclick="manageButtonSeries(this);">6</li>
+                <li onclick="manageButtonSeries(this);">7</li>
+            </ul>
+        </div>
 
-        <h3>Trim Time Above</h3>
-        <input type=number max=24 min=0 step=1 id="trimAboveHour"/> <input type=number max=60 min=0 step=15 id="trimAboveMinute" /> 
-        <button onclick="trimAboveTimeController()">Trim higher (Remove any above this time)</button>
+        <div class="perferenceContainer restrictDays"> 
+            <h2>Remove specific days</h2>
+            <p>Select days you don't wish to attend</p>
+            <ul class="daySelect">
+                <li onclick="manageMultiDaySeries(this);">Mon</li>
+                <li onclick="manageMultiDaySeries(this);">Tue</li>
+                <li onclick="manageMultiDaySeries(this);">Wed</li>
+                <li onclick="manageMultiDaySeries(this);">Thu</li>
+                <li onclick="manageMultiDaySeries(this);">Fri</li>
+                <li onclick="manageMultiDaySeries(this);">Sat</li>
+                <li onclick="manageMultiDaySeries(this);">Sun</li>
+            </ul>
+        </div>
 
-        <h3>Max number of days going to uni</h3>
-        <input type=number max=7 min=1 step=1 id="maxDays" value="7"/> 
+        <div class="perferenceContainer restrictTime"> 
+            <h2>Earilest starting time</h2>
+            <p>Select the earliest time you are willing to start</p>
+            <input type="time"value="0:00" onchange="manageTimeInput(this);">
+        </div>
 
-        <h3>Min number of days going to uni</h3>
-        <input type=number max=7 min=1 step=1 id="minDays" value="0"/> 
+        <div class="perferenceContainer restrictTime"> 
+            <h2>Latest ending time</h2>
+            <p>Select the latest time you are willing to finish</p>
+            <input type="time" value="24:60" onchange="manageTimeInput(this);">
+        </div>
 
-        <h3>Max hours before break</h3>
-        <input type=number id="maxHoursBeforeBreak" value="1440"/> 
+        <div class="perferenceContainer restrictTime"> 
+            <h2>Exclude time range</h2>
+            <p>Select time range</p>
+            <input type="time" value="14:30" onchange="manageTimeRange(this);"><span>  to  </span><input type="time" onchange="manageTimeRange(this);" value="14:30">
+            <p id="warningLabel">The start of the range must be before the end of the range!</p>
+            <div class="checkBoxWrapper">
+                <label class="checkBoxLabel" >Only exclude those that end in range</label>
+                <input type="checkbox" onclick="manageTimeRangeCheckbox(this);" checked="true">
+            </div>
+        </div>
 
-        <h3>Min hours before break</h3>
-        <input type=number id="minHoursBeforeBreak" value="0"/> 
+        <div class="perferenceContainer restrictTime"> 
+            <h2>Limit to time range</h2>
+            <p>Select time range</p>
+            <input type="time" value="14:30" onchange="manageTimeRange(this);"><span>  to  </span><input type="time" onchange="manageTimeRange(this);" value="14:30">
+            <p id="warningLabel">The start of the range must be before the end of the range!</p>
+            <div class="checkBoxWrapper">
+                <label class="checkBoxLabel">Classes may end outside the range</label>
+                <input type="checkbox" onclick="manageTimeRangeCheckbox(this);" checked="true">
+            </div>
+            
+        </div>
 
-        <h3>Min break length</h3>
-        <input type=number id="minBreakLength" value ="0"/> 
+        <div class="perferenceContainer breakRestriction"> 
+            <h2>Minimum time before a break</h2>
+            <p>Input a length of time</p>
+            <div class="hourWrapper">
+                <p>Hour</p>
+                <input type="number" min='0' max='24' step="1" onchange="manageHourMinuteInput(this);">
+            </div>
+            <div class="minuteWrapper">
+                <p>Minute</p>
+                <input type="number" min='0' max='60' step="15" onchange="manageHourMinuteInput(this);">
+            </div>      
+        </div>
 
-        <h3>Max break length</h3>
-        <input type=number id="maxBreakLength" value ="1440"/> 
+        <div class="perferenceContainer breakRestriction"> 
+            <h2>Maximum time before a break</h2>
+            <p>Input a length of time</p>
+            <div class="hourWrapper">
+                <p>Hour</p>
+                <input type="number" min='0' max='24' step="1" onchange="manageHourMinuteInput(this);">
+            </div>
+            <div class="minuteWrapper">
+                <p>Minute</p>
+                <input type="number" min='0' max='60' step="15" onchange="manageHourMinuteInput(this);">
+            </div>  
+        </div>
 
-        <h3>Max hours</h3>
-        <input type=number id="maxHours" value="1440"/>
+        <div class="perferenceContainer breakRestriction"> 
+            <h2>Minimum break length</h2>
+            <p>Input a length of time</p>
+            <div class="hourWrapper">
+                <p>Hour</p>
+                <input type="number" min='0' max='24' step="1" onchange="manageHourMinuteInput(this);">
+            </div>
+            <div class="minuteWrapper">
+                <p>Minute</p>
+                <input type="number" min='0' max='60' step="15" onchange="manageHourMinuteInput(this);">
+            </div>  
+        </div>
 
-        <h3>Min hours</h3>
-        <input type=number id="minHours" value="0"/>
+        <div class="perferenceContainer breakRestriction" > 
+            <h2>Maximum break length</h2>
+            <p>Input a length of time</p>
+            <div class="hourWrapper">
+                <p>Hour</p>
+                <input type="number" min='0' max='24' step="1" onchange="manageHourMinuteInput(this);">
+            </div>
+            <div class="minuteWrapper">
+                <p>Minute</p>
+                <input type="number" min='0' max='60' step="15" onchange="manageHourMinuteInput(this);">
+            </div>  
+        </div>
 
+        <div class="perferenceContainer restrictTime"> 
+            <h2>Minimum time of classes in a day</h2>
+            <p>Input a length of time</p>
+            <div class="hourWrapper">
+                <p>Hour</p>
+                <input type="number" min='0' max='24' step="1" onchange="manageHourMinuteInput(this);">
+            </div>
+            <div class="minuteWrapper">
+                <p>Minute</p>
+                <input type="number" min='0' max='60' step="15" onchange="manageHourMinuteInput(this);">
+            </div>  
+        </div>
 
-        <br><br>
+        <div class="perferenceContainer restrictTime"> 
+            <h2>Maximum time of classes in a day</h2>
+            <p>Input a length of time</p>
+            <div class="hourWrapper">
+                <p>Hour</p>
+                <input type="number" min='0' max='24' step="1" onchange="manageHourMinuteInput(this);">
+            </div>
+            <div class="minuteWrapper">
+                <p>Minute</p>
+                <input type="number" min='0' max='60' step="15" onchange="manageHourMinuteInput(this);">
+            </div>  
+        </div>
+
         <button onclick="console.log(window.classes);">Show Classes</button>
         <button onclick="findPossibleTimetables();">Find timetables</button>
     </div>
